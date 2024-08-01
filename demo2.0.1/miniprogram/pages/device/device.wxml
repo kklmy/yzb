@@ -1,0 +1,19 @@
+<view class="container">
+  <!-- 设备名称 -->
+  <view class="device-name">
+    <text>{{deviceName}}</text>
+  </view>
+
+  <!-- 设备图片轮播 -->
+  <view class="device-image">
+    <swiper autoplay="true" interval="3000" duration="500" indicator-dots="true" class="swiper">
+      <block wx:for="{{deviceImages}}" wx:key="index">
+        <swiper-item class="swiper-item">
+          <image src="{{item}}" mode="aspectFit" class="image"></image>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+
+
+</view>

@@ -1,0 +1,43 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/user/user",
+    "pages/timer/timer",
+    "pages/device/device",
+    "pages/detect/detect"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "color": "#8a8a8a",
+    "backgroundColor": "#ffffff",
+    "selectedColor": "#ff4081",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/device/device",
+        "text": "设备"
+      },
+      {
+        "pagePath": "pages/detect/detect",
+        "text": "坐姿检测"
+      },
+      {
+        "pagePath": "pages/timer/timer",
+        "text": "定时"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的"
+      }
+    ],
+    "position": "bottom"
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "lazyCodeLoading": "requiredComponents"
+}

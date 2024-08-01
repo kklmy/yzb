@@ -1,0 +1,37 @@
+<view class="container">
+  <view class="section">
+    <text>选择连续最大久坐时间：</text>
+    <text></text>
+    <radio-group bindchange="setSitTime">
+      <label wx:for="{{sitOptions}}" wx:key="value">
+        <radio value="{{item.value}}" checked="{{item.checked}}">{{item.text}}</radio>
+      </label>
+    </radio-group>
+    <view wx:if="{{customSitTime}}">
+      <input type="number" placeholder="输入自定义时间（分钟）" bindinput="customSitTimeInput" />
+    </view>
+  </view>
+
+  <view class="section2">
+    <text>选择休息时间：</text>
+    <text></text>
+    <radio-group bindchange="setRestTime">
+      <label wx:for="{{restOptions}}" wx:key="value">
+        <radio value="{{item.value}}" checked="{{item.checked}}">{{item.text}}</radio>
+      </label>
+    </radio-group>
+    <view wx:if="{{customRestTime}}">
+      <input type="number" placeholder="输入自定义时间（分钟）" bindinput="customRestTimeInput" />
+    </view>
+  </view>
+
+  <view class="section3">
+    <button bindtap="startTimer">{{isTiming ? '提前结束' : '开始'}}</button>
+  </view>
+
+  <view class="section">
+    <text wx:if="{{isSitting}}">当前已坐：{{currentSitTime}} 分钟</text>
+    <text wx:if="{{isResting}}">当前休息：{{currentRestTime}} 分钟</text>
+
+  </view>
+</view>

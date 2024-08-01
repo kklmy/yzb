@@ -1,0 +1,44 @@
+/* 设置container的样式 */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 设置设备名称的样式 */
+.device-name {
+  margin-top: 10rpx;
+  margin: 20rpx 0;
+  font-size: large;
+  font: outline;
+  font-weight: 700;
+}
+
+/* 设置图片轮播容器的样式 */
+.device-image {
+  margin-top: 30rpx;
+  width: 100%;
+  height: 600rpx; /* 可以根据需要调整高度 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 设置swiper的样式 */
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+/* 设置swiper-item的样式 */
+.swiper-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 设置图片的样式 */
+.image {
+  width: 100%;
+  height: 100%;
+}

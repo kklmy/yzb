@@ -1,0 +1,33 @@
+<view class="container">
+  <!-- 用户信息部分 -->
+  <view class="header">
+    <image class="avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+
+  </view>
+  <text class="nickname">{{userInfo.nickName}}</text>
+  <view class="content">
+    <view class="info-row">
+      <text>身高: </text>
+      <input value="{{height}}" placeholder="请输入身高" placeholder-class="input-placeholder-center" bindinput="onHeightChange" />
+    </view>
+    <view class="info-row">
+      <text>体重: </text>
+      <input value="{{weight}}" placeholder="请输入体重" placeholder-class="input-placeholder-center" bindinput="onWeightChange" />
+    </view>
+  </view>
+
+  <!-- 历史数据部分 -->
+  <text class="history-title">历史数据</text>
+  <view class="history-section">
+
+
+    <view class="options">
+      <button bindtap="showMonth" class="{{selectedOption === 'month' ? 'active' : ''}}">月</button>
+      <button bindtap="showWeek" class="{{selectedOption === 'week' ? 'active' : ''}}">周</button>
+      <button bindtap="showDay" class="{{selectedOption === 'day' ? 'active' : ''}}">日</button>
+    </view>
+    <view class="chart">
+      <image src="{{currentChart}}" mode="widthFix" />
+    </view>
+  </view>
+</view>

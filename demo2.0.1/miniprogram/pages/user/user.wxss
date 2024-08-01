@@ -1,0 +1,76 @@
+/* 示例样式 */
+.container {
+  padding: 20px;
+}
+
+.header {
+  margin-top: 40rpx;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.nickname {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.info-row {
+  margin-top: 90rpx;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.info-row text {
+  width: 50px;
+}
+
+.history-title {
+  margin-top: 100rpx;
+  font-weight: bolder;
+}
+
+.history-section {
+  margin-top: 20px;
+}
+
+.section-title {
+  font-size: 10px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.options {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.options button {
+  padding: 5px 10px; /* 调整内边距，使按钮更小 */
+  font-size: 14px; /* 调整字体大小 */
+  border: none;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  width: 150rpx; /* 设置按钮的固定宽度 */
+  margin: 0 10rpx; /* 调整按钮间距 */
+}
+
+.options .active {
+  background-color: #007aff;
+  color: #ffffff;
+}
+
+.chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
