@@ -14,41 +14,14 @@
       <text class="userinfo-nickname">{{userInfo.nickName}}</text>
     </block>
   </view>
-
-  <view class="button-container">
-    <button type="primary" bindtap="navigateToDevice">开始使用</button>
-  </view>
-
-  <view class="button-container1">
-    <button bindtap="startScan" type="primary"  wx:if="{{!isScanning}}">开始扫描</button>
-    <button bindtap="stopScan" type="primary"  wx:if="{{isScanning}}">停止扫描</button>
-    <view wx:if="{{!isConnected}}" class="BlueToothList">
-      <view wx:for="{{devices}}" wx:key="deviceId">
-      <text>{{item.name}} ({{item.deviceId}})</text>
-      <button bindtap="connectToDevice" data-device-id="{{item.deviceId}}">连接</button>
-    </view>
-  </view>
-  <view wx:if="{{isConnected}}">
-    <text>连接成功~</text>
-  </view>
-  </view>
 </view>
 
-<!--index.wxml-->
 
 <scroll-view class="main-container" scroll-y="true">
     <privacy></privacy>
     <view wx:for="{{deviceListDataShow}}" wx:key="id" class="list-item" hover-class="list-item-hover" hover-start-time="0" hover-stay-time="100" 
     bindtap="listViewTap" data-name="{{item}}">
-        <image wx:if="{{item.manufacturer==='eciot'}}" src="/img/ecble.png" class="list-item-img"></image>
-        <image wx:else src="/img/ble.png" class="list-item-img"></image>
         <text class="list-item-name">{{item.name}}</text>
-        <image wx:if="{{item.rssi >= -41}}" src="/img/s5.png" mode="aspectFit" class="list-item-rssi-img"></image>
-        <image wx:elif="{{item.rssi >= -55}}" src="/img/s4.png" mode="aspectFit" class="list-item-rssi-img"></image>
-        <image wx:elif="{{item.rssi >= -65}}" src="/img/s3.png" mode="aspectFit" class="list-item-rssi-img"></image>
-        <image wx:elif="{{item.rssi >= -75}}" src="/img/s2.png" mode="aspectFit" class="list-item-rssi-img"></image>
-        <image wx:elif="{{item.rssi < -75}}" src="/img/s1.png" mode="aspectFit" class="list-item-rssi-img"></image>
-        <text class="list-item-rssi">{{item.rssi}}</text>
         <view class="list-item-line"></view>
     </view>
     <view wx:if="{{deviceListDataShow.length==0}}" class="notice"> - 未发现设备，请确认蓝牙是否打开 - </view>

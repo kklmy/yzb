@@ -1,6 +1,4 @@
 <view class="container">
-  <button bindtap="connectBluetooth" type="primary" wx:if="{{!isDetecting}}">开始检测</button>
-  <button bind:tap="stopDetect" wx:if="{{isDectecting}}">正在检测</button>
   <text class="title">当前坐姿: {{postureType}}</text>
   <image class="posture-image" src="{{postureImage}}" />
   <text class="message">{{postureMessage}}</text>
@@ -8,28 +6,4 @@
   <block class="pie-chart">
     <ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ec}}" />
   </block>
-</view>
-<view class="device-container">
-    <view class="control-rev">
-        <text class="title-rev">数据接收 : </text>
-        <button class="bt-clear" type="primary" bindtap="btClearTap" hover-start-time="0">清空</button>
-        <checkbox-group bindchange="checkScroll" class="checkbox-scroll">
-            <checkbox checked="true"></checkbox>
-            <text>滚动</text>
-        </checkbox-group>
-        <checkbox-group bindchange="checkRevHex" class="checkbox-rev-hex">
-            <checkbox></checkbox>
-            <text>Hex</text>
-        </checkbox-group>
-    </view>
-    <view class="scroll-view-container">
-        <scroll-view class="scroll-view-rev" scroll-y="true" scroll-into-view="{{scrollIntoView}}">
-            <view class="view-rev-gap"></view>
-            <text class="text-rev" user-select="true" selectable="true">{{textRevData}}</text>
-            <view class="view-rev-gap"></view>
-            <view id="scroll-view-bottom"></view>
-            <view id="scroll-view-bottom2"></view>
-        </scroll-view>
-    </view>
-
 </view>

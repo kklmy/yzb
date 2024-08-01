@@ -10,9 +10,9 @@ Page({
     textRevData: '',
     scrollIntoView: 'scroll-view-bottom',
     dataBuffer: [], // 用于存储10组数据
-    postureType: '',
-    postureImage: '',
-    postureMessage: '',
+    postureType: '标准',
+    postureImage: '../../images/standard.jpg',
+    postureMessage: '坐得很好，继续保持哦',
     ec: {
       lazyLoad: true
     },
@@ -23,7 +23,8 @@ Page({
       '右倾': 0,
       '翘左腿': 0,
       '翘右腿': 0
-    }
+    },
+    recentPostures: [] // 用于存储最近10次姿势判断结果
   },
 
   onLoad: function () {
@@ -71,17 +72,38 @@ Page({
           // 清空 dataBuffer
           ctx.setData({ dataBuffer: [] })
 
-          // 将结果显示到 textRevData 中
-          let data = `c0=${averages.c0.toFixed(2)}, c1=${averages.c1.toFixed(2)}, c2=${averages.c2.toFixed(2)}, c3=${averages.c3.toFixed(2)}\r\n`
-          data += `坐姿检测结果: ${output}\r\n`
-          ctx.setData({ textRevData: data })
+          // 将结果存储到 recentPostures 中
+          const recentPostures = ctx.data.recentPostures
+          recentPostures.push(output)
+          if (recentPostures.length > 10) {
+            recentPostures.shift()
+          }
+
+          // 统计最近10次姿势判断结果的出现次数
+          const postureCounts = recentPostures.reduce((acc, posture) => {
+            acc[posture] = (acc[posture] || 0) + 1
+            return acc
+          }, {})
+
+          // 找到出现次数最多的姿势
+          let maxCount = 0
+          let maxPosture = ctx.data.postureType
+          for (const posture in postureCounts) {
+            if (postureCounts[posture] > maxCount) {
+              maxCount = postureCounts[posture]
+              maxPosture = posture
+            }
+          }
+
+          // 更新当前坐姿
+          ctx.setData({ postureType: maxPosture })
 
           // 更新页面数据
-          const postureCounts = ctx.data.postureCounts
-          postureCounts[output] = (postureCounts[output] || 0) + 1
+          const postureDataCounts = ctx.data.postureCounts
+          postureDataCounts[maxPosture] = (postureDataCounts[maxPosture] || 0) + 1
 
           let message = ''
-          switch (output) {
+          switch (maxPosture) {
             case '起身':
               message = '可以入座啦~'
               break
@@ -104,10 +126,9 @@ Page({
               message = ''
           }
           ctx.setData({
-            postureType: output,
-            postureImage: ctx.getPostureImage(output),
+            postureImage: ctx.getPostureImage(maxPosture),
             postureMessage: message,
-            postureCounts
+            postureCounts: postureDataCounts
           })
 
           ctx.updateChart()
@@ -116,6 +137,9 @@ Page({
     })
 
     this.echartsComponent = this.selectComponent('#mychart-dom-pie')
+
+    // 设置每五秒更新一次饼图
+    this.chartUpdateInterval = setInterval(this.updateChart, 50000)
   },
 
   onUnload() {

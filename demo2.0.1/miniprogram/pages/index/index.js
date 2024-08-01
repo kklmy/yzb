@@ -27,11 +27,6 @@ Page({
     bluetoothOn: false,
   },
 
-  // bindViewTap() {
-  //   wx.navigateTo({
-  //     url: '../logs/logs'
-  //   });
-  // },
 
   onChooseAvatar(e) {
     const { avatarUrl } = e.detail;
@@ -143,22 +138,22 @@ Page({
       for (const item of ctx.data.deviceListData) {
         if (item.id == res.id) {
           item.name = res.name
-          item.rssi = res.rssi
+          // item.rssi = res.rssi
           return
         }
       }
-      let manufacturer = ''
-      if (res.name.length === 11 && res.name.startsWith('@')) {
-          manufacturer = 'eciot'
-      }
-      if (res.name.length === 15 && res.name.startsWith('BT_')) {
-          manufacturer = 'eciot'
-      }
+      // let manufacturer = ''
+      // if (res.name.length === 11 && res.name.startsWith('@')) {
+      //     manufacturer = 'eciot'
+      // }
+      // if (res.name.length === 15 && res.name.startsWith('BT_')) {
+      //     manufacturer = 'eciot'
+      // }
       ctx.data.deviceListData.push({
           id: res.id,
           name: res.name,
-          rssi: res.rssi,
-          manufacturer,
+          // rssi: res.rssi,
+          // manufacturer,
       })
     })
     ecBLE.startBluetoothDevicesDiscovery()
