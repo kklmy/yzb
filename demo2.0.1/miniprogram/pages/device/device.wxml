@@ -3,7 +3,6 @@
   <view class="device-name">
     <text>{{deviceName}}</text>
   </view>
-
   <!-- 设备图片轮播 -->
   <view class="device-image">
     <swiper autoplay="true" interval="3000" duration="500" indicator-dots="true" class="swiper">
@@ -14,6 +13,4 @@
       </block>
     </swiper>
   </view>
-
-
 </view>

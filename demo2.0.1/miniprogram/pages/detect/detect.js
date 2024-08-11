@@ -3,7 +3,6 @@ const ecBLE = require('../../utils/ecBLE.js')
 import * as echarts from '../components/ec-canvas/echarts';
 
 let ctx
-let c2_standard = 20.0 // 设定一个初始的 c2 标准值
 
 Page({
   data: {
@@ -35,7 +34,6 @@ Page({
       ecUI.showModal('提示', '设备断开连接')
     })
 
-    // 接收数据
     ecBLE.onBLECharacteristicValueChange((str, strHex) => {
       const match = str.match(/c0:(-?\d+\.\d+), c1:(-?\d+\.\d+), c2:(-?\d+\.\d+), c3:(-?\d+\.\d+)/)
       if (match) {
@@ -138,8 +136,10 @@ Page({
 
     this.echartsComponent = this.selectComponent('#mychart-dom-pie')
 
-    // 设置每五秒更新一次饼图
-    this.chartUpdateInterval = setInterval(this.updateChart, 50000)
+    // 每10秒生成一个饼图并显示5秒，之后清除饼图
+    this.chartUpdateInterval = setInterval(() => {
+      this.updateChart()
+    }, 100000)
   },
 
   onUnload() {
@@ -149,31 +149,32 @@ Page({
     if (this.chartUpdateInterval) {
       clearInterval(this.chartUpdateInterval)
     }
+    if (this.chartClearTimeout) {
+      clearTimeout(this.chartClearTimeout)
+    }
   },
 
   determinePosture({ c0, c1, c2, c3 }) {
     const result = (c0 + c2) / (c3 + c1)
-    const third_result = c0 / c1
     const sum_ = c0 + c1 + c2 + c3
-    const other = c3 / c2
-    const q = c2 / c0
-
     let output = ''
-    if (sum_ < 200) {
+    if (sum_ < 150) {
       output = '起身'
     } else {
-      if (result < 0.7 && (other > 4 || c2 < c2_standard * 0.7)) {
-        output = '左倾'
-      } else if (0.7 <= result && result <= 1.2 && 1 < third_result && third_result < 2) {
-        c2_standard = c2
-        output = '标准'
-      } else if (result > 1.2) {
-        output = '右倾'
-      } else {
-        if (q < 1) {
-          output = '翘左腿'
-        } else {
-          output = '翘右腿'
+      if (Math.abs(c0 - 35) < 5) {
+        //翘右腿
+        output='翘右腿'
+      }
+      else if(Math.abs(c1 - 32) < 5) {
+        output='翘左腿'
+      }
+      else {
+        if (result < 0.8) {
+          output = '左倾'
+        } else if (0.8 <= result && result <= 1.3) {
+          output = '标准'
+        } else if (result > 1.3) {
+          output = '右倾'
         }
       }
     }
@@ -201,7 +202,6 @@ Page({
 
   setPieChartOptions: function (chart) {
     const postureCounts = this.data.postureCounts
-
     const chartData = Object.keys(postureCounts).map(key => ({
       name: key,
       value: postureCounts[key]
@@ -240,6 +240,11 @@ Page({
         })
         canvas.setChart(chart)
         this.setPieChartOptions(chart)
+
+        // 在5秒后清除饼图
+        this.chartClearTimeout = setTimeout(() => {
+          chart.dispose()
+        }, 5000)  // 饼图显示5秒后清除
         return chart
       })
     }
