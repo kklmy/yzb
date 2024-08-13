@@ -23,7 +23,8 @@ Page({
       '翘左腿': 0,
       '翘右腿': 0
     },
-    recentPostures: [] // 用于存储最近10次姿势判断结果
+    recentPostures: [], // 用于存储最近10次姿势判断结果
+    postureCounter:0, //计数器，统计坐姿情况 刷新饼图
   },
 
   onLoad: function () {
@@ -76,7 +77,9 @@ Page({
           if (recentPostures.length > 10) {
             recentPostures.shift()
           }
-
+          // 更新坐姿统计计数器
+          let postureCounter = ctx.data.postureCounter + 1;
+          ctx.setData({ postureCounter });
           // 统计最近10次姿势判断结果的出现次数
           const postureCounts = recentPostures.reduce((acc, posture) => {
             acc[posture] = (acc[posture] || 0) + 1
@@ -129,17 +132,16 @@ Page({
             postureCounts: postureDataCounts
           })
 
-          ctx.updateChart()
+          // 每统计20次坐姿后，绘制一次饼图
+          if (ctx.data.postureCounter === 8) {
+            ctx.updateChart();
+            ctx.setData({ postureCounter: 0 }); // 重置计数器
+          }
         }
       }
-    })
+    });
 
     this.echartsComponent = this.selectComponent('#mychart-dom-pie')
-
-    // 每10秒生成一个饼图并显示5秒，之后清除饼图
-    this.chartUpdateInterval = setInterval(() => {
-      this.updateChart()
-    }, 100000)
   },
 
   onUnload() {
@@ -155,31 +157,42 @@ Page({
   },
 
   determinePosture({ c0, c1, c2, c3 }) {
-    const result = (c0 + c2) / (c3 + c1)
-    const sum_ = c0 + c1 + c2 + c3
-    let output = ''
+    const result = (c0 + c2) / (c3 + c1);
+    const sum_ = c0 + c1 + c2 + c3;
+    let output = '';
     if (sum_ < 150) {
-      output = '起身'
+      output = '起身';
     } else {
       if (Math.abs(c0 - 35) < 5) {
-        //翘右腿
-        output='翘右腿'
-      }
-      else if(Math.abs(c1 - 32) < 5) {
-        output='翘左腿'
-      }
-      else {
+        // 翘右腿
+        output = '翘右腿';
+      } else if (Math.abs(c1 - 32) < 5) {
+        output = '翘左腿';
+      } else {
         if (result < 0.8) {
-          output = '左倾'
+          output = '左倾';
         } else if (0.8 <= result && result <= 1.3) {
-          output = '标准'
+          output = '标准';
         } else if (result > 1.3) {
-          output = '右倾'
+          output = '右倾';
         }
       }
     }
-    return output
+  
+    // 如果不是标准坐姿或者不是起身，则开始计时
+    if (output !== '标准' && output !== '起身') {
+      // 设置1秒后的震动
+      setTimeout(() => {
+        // 再次确认用户依然处于非标准姿势
+        if (output === this.data.postureType) {
+          wx.vibrateLong(); // 手机震动1秒
+        }
+      }, 1000); // 1秒后震动
+    }
+  
+    return output;
   },
+  
 
   getPostureImage: function (postureType) {
     switch (postureType) {
@@ -201,13 +214,14 @@ Page({
   },
 
   setPieChartOptions: function (chart) {
-    const postureCounts = this.data.postureCounts
+    const postureCounts = this.data.postureCounts;
     const chartData = Object.keys(postureCounts).map(key => ({
       name: key,
       value: postureCounts[key]
-    }))
-
+    }));
+  
     chart.setOption({
+      animation: true, // 禁用动画效果
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -227,9 +241,9 @@ Page({
           }
         }
       ]
-    })
+    });
   },
-
+  
   updateChart: function () {
     if (this.echartsComponent) {
       this.echartsComponent.init((canvas, width, height, dpr) => {
@@ -240,12 +254,6 @@ Page({
         })
         canvas.setChart(chart)
         this.setPieChartOptions(chart)
-
-        // 在5秒后清除饼图
-        this.chartClearTimeout = setTimeout(() => {
-          chart.dispose()
-        }, 5000)  // 饼图显示5秒后清除
-        return chart
       })
     }
   }
